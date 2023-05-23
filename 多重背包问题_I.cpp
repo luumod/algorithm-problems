@@ -14,6 +14,6 @@ int main(){
             }
         }
     }
-    std::cout<<dp[V];
+    std::cout<<dp[V]; //修改了内容
 	return 0;
 }
