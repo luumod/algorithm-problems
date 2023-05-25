@@ -2,3 +2,6 @@
 *.exe
 *.vscode
 *.txt
+*.prob
+*.in
+*.out
