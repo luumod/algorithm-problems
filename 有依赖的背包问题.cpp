@@ -1,39 +1,38 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
+#if 0
+    #define int long long
+#endif
+template<typename T1,typename T2>std::ostream&operator<<(std::ostream&out,std::pair<T1,T2>pa){out<<"{fi: "<<pa.first<<", se: "<<pa.second<<"}\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::vector<T>vec){for(auto&x:vec){out<<x<<' ';}out<<"\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::deque<T>deq){for(auto&x:deq){out<<x<<' ';}out<<"\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::queue<T>q){std::queue<T>t=q;while(!q.empty()){out<<q.front()<<" ";q.pop();}q=t;out<<"\n";return out;}template<typename T1,typename pred>std::ostream&operator<<(std::ostream&out,std::priority_queue<T1,std::vector<T1>,pred>q){auto t=q;while(!q.empty()){out<<q.top()<<" ";q.pop();}q=t;out<<"\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::stack<T>q){std::stack<T>t=q;while(!q.empty()){out<<q.top()<<" ";q.pop();}q=t;out<<"\n";return out;}template<typename T1,typename T2>std::ostream&operator<<(std::ostream&out,std::unordered_map<T1,T2>ump){for(auto&x:ump){out<<"key: "<<x.first<<", val: "<<x.second<<"\n";}out<<"\n";return out;}template<typename T1>std::ostream&operator<<(std::ostream&out,std::unordered_set<T1>ust){for(auto&x:ust){out<<x<<" ";}out<<"\n";return out;}template<typename T1>std::ostream&operator<<(std::ostream&out,std::set<T1>st){for(auto&x:st){out<<x<<" ";}out<<"\n";return out;}template<typename T1,typename T2>std::ostream&operator<<(std::ostream&out,std::map<T1,T2>mp){for(auto&x:mp){out<<"key: "<<x.first<<", val: "<<x.second<<"\n";}out<<"\n";return out;}template<typename T>void show(T a[],int beg,int end){for(int i=beg;i<=end;i++){std::cout<<a[i]<<" ";}std::cout<<"\n";}
 
 const int N=110;
-std::vector<int> tree[N];
-std::vector<int> W(N),V(N);//体积和价值
-int dp[N][N]; //dp[i][j]：当前节点为i 背包容量为j时的最大价值
-int n,M;//物品种类数量和背包容量
+int dp[N][N],w[N],v[N];  //dp[i][j]: 当前第i个物品，背包容量为j时的最大价值
+int n,V,fa,root;
+std::vector<int> vec[N];
 void dfs(int now){
-    //首先对自身初始化，即只装自己节点的情况下的背包不同容量最大值
-    for (int i=W[now];i<=M;i++){
-        dp[now][i]=V[now];
+    for (int j=w[now];j<=V;j++){
+        dp[now][j]=v[now]; //只有now物品本身
     }
-    for (auto& son:tree[now]){
+    for (auto& son:vec[now]){
         dfs(son);
-        //分组背包
-        for (int i=M;i>=W[now];i--){//倒叙遍历背包容量
-            for (int j=0;j<=i-W[now];j++){//除去当前节点，遍历可以选择其他节点的不同容量
+        for (int i=V;i>=w[now];i--){
+            for (int j=0;j<=i-w[now];j++){
                 dp[now][i]=std::max(dp[now][i],dp[now][i-j]+dp[son][j]);
             }
         }
     }
 }
-int main(){
-    std::cin>>n>>M;
-    int root=0;
-    for (int i=1;i<=n;i++){ 
-        int w,v,fa;
-        std::cin>>W[i]>>V[i]>>fa;
+signed main(){
+    std::cin>>n>>V;
+    for (int i=1;i<=n;i++){
+        std::cin>>w[i]>>v[i]>>fa;
         if (fa==-1){
             root=i;
         }
         else{
-            tree[fa].push_back(i);
+            vec[fa].push_back(i);
         }
     }
     dfs(root);
-    std::cout<<dp[root][M];
-	return 0;
+    std::cout<<dp[root][V];
+    return 0;
 }

@@ -1,32 +1,30 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
+#if 0
+    #define int long long
+#endif
+template<typename T1,typename T2>std::ostream&operator<<(std::ostream&out,std::pair<T1,T2>pa){out<<"{fi: "<<pa.first<<", se: "<<pa.second<<"}\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::vector<T>vec){for(auto&x:vec){out<<x<<' ';}out<<"\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::deque<T>deq){for(auto&x:deq){out<<x<<' ';}out<<"\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::queue<T>q){std::queue<T>t=q;while(!q.empty()){out<<q.front()<<" ";q.pop();}q=t;out<<"\n";return out;}template<typename T1,typename pred>std::ostream&operator<<(std::ostream&out,std::priority_queue<T1,std::vector<T1>,pred>q){auto t=q;while(!q.empty()){out<<q.top()<<" ";q.pop();}q=t;out<<"\n";return out;}template<typename T>std::ostream&operator<<(std::ostream&out,std::stack<T>q){std::stack<T>t=q;while(!q.empty()){out<<q.top()<<" ";q.pop();}q=t;out<<"\n";return out;}template<typename T1,typename T2>std::ostream&operator<<(std::ostream&out,std::unordered_map<T1,T2>ump){for(auto&x:ump){out<<"key: "<<x.first<<", val: "<<x.second<<"\n";}out<<"\n";return out;}template<typename T1>std::ostream&operator<<(std::ostream&out,std::unordered_set<T1>ust){for(auto&x:ust){out<<x<<" ";}out<<"\n";return out;}template<typename T1>std::ostream&operator<<(std::ostream&out,std::set<T1>st){for(auto&x:st){out<<x<<" ";}out<<"\n";return out;}template<typename T1,typename T2>std::ostream&operator<<(std::ostream&out,std::map<T1,T2>mp){for(auto&x:mp){out<<"key: "<<x.first<<", val: "<<x.second<<"\n";}out<<"\n";return out;}template<typename T>void show(T a[],int beg,int end){for(int i=beg;i<=end;i++){std::cout<<a[i]<<" ";}std::cout<<"\n";}
+
 
 const int N=110;
-int n,M;
-int dp[N]{}; 
-int w[N][N]{},v[N][N]{},g[N]{};//体积 价值 组数
-void GroupBag(){
-    for (int i=1;i<=n;i++){//遍历物品
-        for (int j=M;j>=1;j--){//倒叙遍历背包容量（转换为一维）
-            for (int k=0;k<=g[i];k++){ //枚举选择每组内的物品，k=0表示不选这一组的物品
-                if (j>=w[i][k]){
+int dp[N];
+int n,V,group[N],w[N][N],v[N][N];
+signed main(){
+    std::cin>>n>>V;
+    for (int i=1;i<=n;i++){
+        std::cin>>group[i];
+        for (int j=1;j<=group[i];j++){ //每组的物品
+            std::cin>>w[i][j]>>v[i][j];
+        }   
+    }
+    for (int i=1;i<=n;i++){
+        for (int j=V;j>=1;j--){
+            for (int k=0;k<=group[i];k++){ //第i组的第k个物品
+                if (j-w[i][k]>=0){
                     dp[j]=std::max(dp[j],dp[j-w[i][k]]+v[i][k]);
                 }
             }
         }
     }
-    std::cout<<dp[M];
+    std::cout<<dp[V];
+    return 0;
 }
-int main(){
-    std::cin>>n>>M;
-    for (int i=1;i<=n;i++){
-        int weight,value;
-        std::cin>>g[i];
-        for (int j=1;j<=g[i];j++){
-            std::cin>>weight>>value;
-            w[i][j]=weight;
-            v[i][j]=value;
-        }
-    }
-    GroupBag();
-	return 0;
-}   
